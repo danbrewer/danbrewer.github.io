@@ -129,7 +129,7 @@
     function(module, exports, __webpack_require__) {
         function Symbol(chart, options, symbol) {
             this.chart = chart, this.group = this.chart.paper.set(), this.symbol = symbol, this.connectedTo = [], 
-            this.symbolType = options.symbolType, this.flowstate = options.flowstate || "future", 
+            this.symbolType = options.symbolType, this.flowstate = options.flowstate || "default", 
             this.lineStyle = options.lineStyle || {}, this.key = options.key || "", this.next_direction = options.next && options.direction_next ? options.direction_next : void 0, 
             this.text = this.chart.paper.text(0, 0, options.text), //Raphael does not support the svg group tag so setting the text node id to the symbol node id plus t
             options.key && (this.text.node.id = options.key + "t"), this.text.node.setAttribute("class", this.getAttr("class") + "t"), 

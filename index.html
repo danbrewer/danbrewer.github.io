@@ -6,8 +6,8 @@
         <style type="text/css">
           .end-element { background-color : #FFCCFF; }
         </style>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.0/raphael-min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.0/raphael-min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <!-- <script src="http://flowchart.js.org/flowchart-latest.js"></script> -->
         <script src="/js/flowchart.js"></script>
         <script>
@@ -30,7 +30,7 @@
                       // 'y': 50,
                       'line-width': 3,
                      // 'maxWidth': 50,//ensures the flowcharts fits within a certian width
-                      'line-length': 50,
+                     // 'line-length': 50,
                       'text-margin': 10,
                       'font-size': 14,
                       'font': 'normal',
@@ -46,18 +46,19 @@
                       'scale': 1,
                       'symbols': {
                         'start': {
-                          'font-color': 'red',
+                          //'font-color': 'black',
                           'element-color': 'green',
                           'fill': 'yellow'
                         },
                         'end':{
-                          'class': 'end-element'
+                          //'class': 'end-element'
+                          'element-color': 'red',
                         }
                       },
                       'flowstate' : {
                         'past' : { 'fill' : '#CCCCCC', 'font-size' : 12},
                         'current' : {'fill' : 'yellow', 'font-color' : 'red', 'font-weight' : 'bold'},
-                        'future' : { 'fill' : '#FFFF99'},
+                        'default' : { 'fill' : '#FFFFDD'},
                         'request' : { 'fill' : 'blue'},
                         'invalid': {'fill' : '#444444'},
                         'approved' : { 'fill' : '#58C4A3', 'font-size' : 12, 'yes-text' : 'APPROVED', 'no-text' : 'n/a' },
@@ -75,26 +76,30 @@
     </head>
     <body>
         <div><textarea id="code" style="width: 100%;" rows="11">
-st=>start: Start|past:>http://www.google.com[blank]
-e=>end: End:>http://www.google.com
-op1=>operation: My Operation|past
-op2=>operation: Stuff|current
-sub1=>subroutine: My Subroutine|invalid
-cond=>condition: Yes
-or No?|approved:>http://www.google.com
-c2=>condition: Good idea|rejected
-io=>inputoutput: catch something...|request
-db=>database: CORRESPONDENCE_SERVICE
-cld=>cloud: This is the cloud!
-
-st->op1(right)->cond
-cond(yes, right)->c2
-cond(no)->sub1(left)->op1
-c2(yes)->io->e
-c2(no)->op2->e->db->cld
-
-st@>op1({"stroke":"Red"})@>cond({"stroke":"Red","stroke-width":6,"arrow-end":"classic-wide-long"})@>c2({"stroke":"Red"})@>op2({"stroke":"Red"})@>e({"stroke":"Red"})</textarea></div>
-        <div><button id="run" type="button">Run</button></div>
+          st=>start: Correspondence
+          e=>end: End
+          condNewCorresp=>condition: Create new document?
+          opCopyTemplate=>operation: Copy template to new file
+          opToken=>operation: Generate token
+          opSaveCooke=>operation: Save token as cookie
+          subWriteDB=>database: Save merge data using token
+          cloudBroadcastToken=>cloud: Broadcast token to clients
+          opTokenNotice=>operation: Client receives token notice
+          condMyToken=>condition: Token matches cookie? 
+          subReadDB=>database: Read merge data using token
+          opStartWord=>operation: Start MSWord
+          opMergeData=>operation: Merge into MSWord
+          ioPrompt=>inputoutput: Prompt for other data
+          opSaveData=>operation: Save document
+          
+          st->condNewCorresp(yes, right)->opCopyTemplate->opToken
+          condNewCorresp(no)->opToken
+          opToken->opSaveCooke
+          opSaveCooke->subWriteDB->cloudBroadcastToken(right)->opTokenNotice
+          opTokenNotice->condMyToken(no)->e
+          condMyToken(yes)->subReadDB->opStartWord
+          opStartWord->opMergeData->ioPrompt->opSaveData->e</textarea></div>
+          <div><button id="run" type="button">Run</button></div>
         <div id="canvas"></div>
     </body>
 </html>
